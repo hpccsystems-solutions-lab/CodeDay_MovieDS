@@ -13,13 +13,14 @@ IMPORT STD;
 
 //Print the first 10 rows 
 //Answer will have 10 rows of the movie dataset
+
 OUTPUT(CHOOSEN(getMovies.MovieDS, 10), NAMED('TenRows'));
 
 //*********************************************************************************
 //*********************************************************************************
 
 //How many rows are in the movie dataset?
-//Answer is:
+//Answer is: 10866
 
 OUTPUT(COUNT(getMovies.MovieDS), NAMED('Total_Movies'));
 
@@ -28,6 +29,7 @@ OUTPUT(COUNT(getMovies.MovieDS), NAMED('Total_Movies'));
 
 //How many movies have been directed by 'Alan Taylor'?
 //Answer is: 2
+
 OUTPUT(COUNT(getMovies.MovieDS(Director = 'Alan Taylor')), NAMED('Count_AlanTaylor'));
 
 
@@ -36,6 +38,7 @@ OUTPUT(COUNT(getMovies.MovieDS(Director = 'Alan Taylor')), NAMED('Count_AlanTayl
 
 //How many movies have been directed by 'Tom McCarthy' with Vote_Average over 7
 //Answer is: 2
+
 getTom := getMovies.MovieDS(Director = 'Tom McCarthy' AND Vote_Average > 7);
 OUTPUT(COUNT(getTom), NAMED('getTom'));
 
@@ -44,6 +47,7 @@ OUTPUT(COUNT(getTom), NAMED('getTom'));
 
 //How many movies have 0 Budget
 //Answer is: 5696
+
 getBudget := getMovies.MovieDS(Budget = 0);
 OUTPUT(COUNT(getBudget), NAMED('getBudget'));
 
@@ -59,6 +63,8 @@ OUTPUT(COUNT(isRelease), NAMED('isRelease'));
 //*********************************************************************************
 
 //Get the Max value for Vote_Average and count how many rows have the same value
+//Answer is: 1
+
 getMaxVote := MAX(getMovies.MovieDS, Vote_Average);
 countMaxPop := COUNT(getMovies.MovieDS(Vote_Average = getMaxVote));
 OUTPUT(countMaxPop, NAMED('countMaxPop'));
@@ -67,20 +73,25 @@ OUTPUT(countMaxPop, NAMED('countMaxPop'));
 //*********************************************************************************
 
 //What is the average Runtime
+//Answer is: 102.0708632431437
+
 getAvgRumtime := AVE(getMovies.MovieDS, Runtime);
 OUTPUT(getAvgRumtime, NAMED('getAvgRumtime'));
 
 //*********************************************************************************
 //*********************************************************************************
 
-//Is there any correlation between Budget and Revenue
-//Answer is: 
+//What is the correlation between Budget and Revenue
+//Answer is: 0.734900681907618
+
 OUTPUT(CORRELATION(getMovies.MovieDS, Budget, Revenue), NAMED('isCorrelated'));
 
 //*********************************************************************************
 //*********************************************************************************
 
 //How many movies have no Director and no tagline
+//Answer is: 34
+
 noDir := getMovies.MovieDS(Director = '' AND Tagline = '');
 OUTPUT(COUNT(noDir), NAMED('noDir'));
 
@@ -97,7 +108,7 @@ OUTPUT(COUNT(noDir), NAMED('noDir'));
 //Then you can use: STD.Date.Day(Date), STD.Date.Month(Date), and STD.Date.Year(Date)
 //Display the first 100 rows
 
-//Answer will create a new dataset with 5 columns 
+//Answer will create a new dataset with 5 columns and 100 rows
 
 NewRec := RECORD
     STRING Original_Title;
@@ -113,6 +124,7 @@ BrokenYearDS := PROJECT(getMovies.MovieDS,
                             SELF.Month := STD.Date.Month(LEFT.Release_Date),
                             SELF.Year  := STD.Date.Year(LEFT.Release_Date),
                             SELF := LEFT));
+
 OUTPUT(CHOOSEN(BrokenYearDS, 100), NAMED('BrokenYearDS'));
 
 //*********************************************************************************
@@ -121,7 +133,8 @@ OUTPUT(CHOOSEN(BrokenYearDS, 100), NAMED('BrokenYearDS'));
 //View the number of movies created per year
 //Count and output your total result
 
-//Result is : 36 rows
+//Result is : 56 
+
 year_movies_count := TABLE(getMovies.MovieDS,
                                 {
                                     Release_Year,                                    
@@ -136,6 +149,8 @@ OUTPUT(COUNT(year_movies_count), NAMED('year_movies_count'));
 
 //Calculate the average Popularity per Artist for year 2015
 //Display how many rows are in the result dataset
+
+//Result is : 629
 
 Filter2015 := getMovies.MovieDS(Release_year = 2015);
 
@@ -158,6 +173,8 @@ OUTPUT(COUNT(AvgPop), NAMED('AvgPop'));
 //Create a new dataset which only shows the following field which exact name:
 //Tile, Director, Year and Revenue
 //Show the first 50 rows
+
+//Answer should include 50 rows and 4 columns
 
 newRec2 := RECORD
     STRING  Title;
@@ -183,6 +200,8 @@ OUTPUT(CHOOSEN(newDS, 50), NAMED('newDS'));
 //              60 t0 120: 'Just Right', over 120min 'Too Long'
 //3- IsExp: If budget is more than 100,000,000 it's True, else False
 //4- VoteInfo: Vote_Count + _ +  Vote_Average
+
+//Answer should include 50 rows and 4 columns
 
 newRec3 := RECORD
     STRING  Movie;
